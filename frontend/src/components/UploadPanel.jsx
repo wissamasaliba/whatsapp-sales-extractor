@@ -47,7 +47,7 @@ export default function UploadPanel({ onResult }) {
           padding: "48px 24px",
           textAlign: "center",
           cursor: loading ? "not-allowed" : "pointer",
-          background: dragging ? "#f0fff4" : "#fafafa",
+          background: dragging ? "#f0fff4" : "#f9fafb",
           transition: "all 0.2s",
         }}
       >

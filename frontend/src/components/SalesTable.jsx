@@ -18,10 +18,10 @@ export default function SalesTable({ sales, errors }) {
     <div style={{ overflowX: "auto" }}>
       {errors && errors.length > 0 && (
         <details style={{ marginBottom: 16 }}>
-          <summary style={{ cursor: "pointer", color: "#b45309", fontWeight: 600 }}>
+          <summary style={{ cursor: "pointer", color: "#dc2626", fontWeight: 600 }}>
             {errors.length} issue{errors.length !== 1 ? "s" : ""} flagged by auditor
           </summary>
-          <ul style={{ fontSize: 13, color: "#92400e" }}>
+          <ul style={{ fontSize: 13, color: "#b91c1c" }}>
             {errors.map((e, i) => (
               <li key={i}>{e.reason}</li>
             ))}

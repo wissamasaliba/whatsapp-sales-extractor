@@ -9,7 +9,7 @@ export default function Navbar() {
         display: "flex",
         alignItems: "center",
         gap: 12,
-        padding: "12px 32px",
+        padding: "12px 24px",
         boxSizing: "border-box",
         boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
       }}
@@ -17,7 +17,7 @@ export default function Navbar() {
       <img
         src={logo}
         alt="Logo"
-        style={{ height: 40, width: 40, borderRadius: 8, objectFit: "cover" }}
+        style={{ height: 40, width: 40, borderRadius: 8, objectFit: "contain", flexShrink: 0 }}
       />
       <span
         style={{

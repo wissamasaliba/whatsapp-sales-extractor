@@ -1,0 +1,6 @@
+2026-02-22 00:00:00, src/components/Navbar.jsx, Image Clipping, Logo image used objectFit cover which crops the logo, FIXED, Changed objectFit from cover to contain
+2026-02-22 00:00:00, src/components/Navbar.jsx, Image Constraints, Logo img had no flexShrink 0 protection in flex container, FIXED, Added flexShrink 0 to img style
+2026-02-22 00:00:00, src/index.css, Inconsistent Fonts, .btn class had no font-family so buttons could render in browser native font, FIXED, Added font-family inherit to .btn rule
+2026-02-22 00:00:00, src/components/Navbar.jsx, Spacing / Alignment, Navbar horizontal padding 32px misaligned with page content padding 24px, FIXED, Changed Navbar padding from 12px 32px to 12px 24px
+2026-02-22 00:00:00, src/components/SalesTable.jsx, Mismatched Colors, Auditor warning used amber colors #b45309 and #92400e inconsistent with app error color #dc2626, FIXED, Changed to #dc2626 and #b91c1c
+2026-02-22 00:00:00, src/components/UploadPanel.jsx, Mismatched Colors, Drop zone idle background #fafafa differed from page background #f9fafb, FIXED, Changed idle background to #f9fafb

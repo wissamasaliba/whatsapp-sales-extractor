@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Navbar from "./components/Navbar";
 import UploadPanel from "./components/UploadPanel";
 import SalesTable from "./components/SalesTable";
 import ExportButton from "./components/ExportButton";
@@ -16,26 +17,7 @@ export default function App() {
 
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", minHeight: "100vh", background: "#f9fafb" }}>
-      {/* Header */}
-      <header
-        style={{
-          background: "#25d366",
-          color: "#fff",
-          padding: "16px 32px",
-          display: "flex",
-          alignItems: "center",
-          gap: 12,
-          boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
-        }}
-      >
-        <span style={{ fontSize: 28 }}>💬</span>
-        <div>
-          <h1 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>WhatsApp Sales Extractor</h1>
-          <p style={{ margin: 0, fontSize: 13, opacity: 0.85 }}>
-            Upload a chat export and extract structured sales data with AI
-          </p>
-        </div>
-      </header>
+      <Navbar />
 
       <main style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 24px" }}>
         {!result ? (

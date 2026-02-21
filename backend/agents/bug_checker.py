@@ -37,6 +37,21 @@ Return ONLY the JSON object.
 
 class BugChecker:
     async def run(self, sales: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """
+        Run local heuristic checks then deep-audit via Groq.
+
+        Local checks (dedup, arithmetic) run first without an API call.
+        The remaining records are then sent to the LLM auditor for duplicate
+        detection, price anomalies, and cross-record inconsistencies.
+
+        Args:
+            sales: Validated sale dicts from ValidatorAgent.
+
+        Returns:
+            Dict with keys:
+              sales  — cleaned list with confirmed duplicates removed
+              errors — combined list of local and LLM-flagged issue dicts
+        """
         # Fast local checks first
         sales, local_errors = self._local_checks(sales)
 
@@ -66,6 +81,19 @@ class BugChecker:
             }
 
     def _is_media_only(self, sale: Dict[str, Any]) -> bool:
+        """
+        Return True when the sale record originates from a media-placeholder message.
+
+        A record is considered media-only if its product field matches a known
+        WhatsApp media omission string, or if it has neither a product name nor
+        any numeric data.
+
+        Args:
+            sale: Sale dict to inspect.
+
+        Returns:
+            True if the record should be silently discarded, False otherwise.
+        """
         product = (sale.get("product") or "").strip()
         if product and MEDIA_PATTERNS.search(product):
             return True
@@ -76,6 +104,22 @@ class BugChecker:
     def _local_checks(
         self, sales: List[Dict[str, Any]]
     ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+        """
+        Apply fast, deterministic checks without calling the LLM.
+
+        Checks performed:
+          1. Silently discard media-only placeholders.
+          2. Deduplicate by (timestamp, sender, product) key.
+          3. Flag arithmetic mismatches where qty × unit_price diverges from
+             total_price by more than 5%, and auto-correct total_price.
+          4. Flag records with a real product but no price or quantity at all.
+
+        Args:
+            sales: Full list of validated sale dicts.
+
+        Returns:
+            Tuple of (clean_sales, error_list).
+        """
         seen: set = set()
         clean: List[Dict[str, Any]] = []
         errors: List[Dict[str, Any]] = []

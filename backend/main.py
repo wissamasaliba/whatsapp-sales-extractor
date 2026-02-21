@@ -1,3 +1,13 @@
+"""
+FastAPI application entry point for the WhatsApp Sales Extractor.
+
+Exposes three endpoints:
+  GET  /health  — liveness probe
+  POST /upload  — accepts a WhatsApp .txt export, runs the full agent pipeline,
+                  and returns structured sales data as JSON
+  POST /export  — accepts a JSON sales payload and streams back an Excel file
+"""
+
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
@@ -23,11 +33,25 @@ orchestrator = Orchestrator()
 
 @app.get("/health")
 def health_check():
+    """Return a simple liveness response to confirm the API is running."""
     return {"status": "ok"}
 
 
 @app.post("/upload")
 async def upload_chat(file: UploadFile = File(...)):
+    """
+    Accept a WhatsApp exported .txt file and run the full agent pipeline.
+
+    Args:
+        file: Multipart-uploaded .txt file from the client.
+
+    Returns:
+        JSON with keys: filename (str), sales (list of sale dicts),
+        errors (list of flagged issue dicts).
+
+    Raises:
+        HTTPException 400: if the uploaded file is not a .txt file.
+    """
     if not file.filename.endswith(".txt"):
         raise HTTPException(status_code=400, detail="Only .txt WhatsApp export files are accepted.")
 
@@ -41,6 +65,19 @@ async def upload_chat(file: UploadFile = File(...)):
 
 @app.post("/export")
 async def export_to_excel(payload: dict):
+    """
+    Generate and stream an Excel file from the provided sales data.
+
+    Args:
+        payload: JSON body containing a "sales" key with a list of sale dicts.
+
+    Returns:
+        FileResponse streaming the generated .xlsx file with appropriate
+        content-type and download filename headers.
+
+    Raises:
+        HTTPException 400: if the sales list is absent or empty.
+    """
     sales = payload.get("sales", [])
     if not sales:
         raise HTTPException(status_code=400, detail="No sales data to export.")

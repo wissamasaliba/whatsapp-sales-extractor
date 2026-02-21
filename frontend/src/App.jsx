@@ -4,13 +4,28 @@ import UploadPanel from "./components/UploadPanel";
 import SalesTable from "./components/SalesTable";
 import ExportButton from "./components/ExportButton";
 
+/**
+ * Root application component.
+ *
+ * Manages a single piece of state (`result`) that toggles the UI between
+ * the upload view (when null) and the results view (when populated).
+ *
+ * @returns {JSX.Element} The full-page layout with Navbar and main content area.
+ */
 export default function App() {
   const [result, setResult] = useState(null);
 
+  /**
+   * Store the pipeline response returned by the backend after a successful upload.
+   * @param {Object} data - Response from POST /upload: { filename, sales, errors, stats }.
+   */
   function handleResult(data) {
     setResult(data);
   }
 
+  /**
+   * Clear the current result and return the UI to the upload screen.
+   */
   function handleReset() {
     setResult(null);
   }

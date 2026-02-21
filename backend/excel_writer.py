@@ -24,6 +24,19 @@ HEADER_FONT = Font(color="FFFFFF", bold=True)
 
 
 def write_to_excel(sales: List[Dict[str, Any]], output_path: str) -> str:
+    """
+    Write a list of sale records to an Excel workbook.
+
+    Creates a single worksheet named "Sales" with a styled header row and
+    auto-fitted column widths. Overwrites any existing file at output_path.
+
+    Args:
+        sales:       List of sale dicts. Expected keys match the COLUMNS list.
+        output_path: Absolute path where the .xlsx file will be saved.
+
+    Returns:
+        The output_path string, confirming where the file was written.
+    """
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = "Sales"

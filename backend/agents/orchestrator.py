@@ -19,12 +19,27 @@ from agents.bug_checker import BugChecker
 
 class Orchestrator:
     def __init__(self):
+        """Instantiate all four pipeline agents."""
         self.parser = ParserAgent()
         self.extractor = ExtractorAgent()
         self.validator = ValidatorAgent()
         self.bug_checker = BugChecker()
 
     async def run(self, raw_text: str, filename: str = "") -> Dict[str, Any]:
+        """
+        Execute the full extraction pipeline on raw WhatsApp chat text.
+
+        Args:
+            raw_text: Full contents of the WhatsApp .txt export file.
+            filename: Original uploaded filename, included verbatim in the response.
+
+        Returns:
+            Dict with keys:
+              filename        — original filename
+              sales           — list of validated sale dicts
+              errors          — list of flagged issue dicts
+              stats           — message_parsed, candidates_found, valid_sales, flagged_errors counts
+        """
         # Step 1: Parse raw WhatsApp text into messages
         messages = await self.parser.run(raw_text)
 

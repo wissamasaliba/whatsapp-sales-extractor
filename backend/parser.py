@@ -17,6 +17,16 @@ TIMESTAMP_PATTERN = re.compile(
 
 @dataclass
 class Message:
+    """
+    Represents a single parsed WhatsApp message.
+
+    Attributes:
+        timestamp: Date and time string as it appears in the export (e.g. "12/31/24, 3:45 PM").
+        sender:    Display name of the message author. Empty string for system messages.
+        text:      Full message body; multi-line messages are joined with newlines.
+        is_system: True for WhatsApp system notices (e.g. encryption banner, group events).
+        raw:       Original unmodified line(s) from the export file.
+    """
     timestamp: str
     sender: str
     text: str
@@ -69,6 +79,15 @@ def parse_chat(raw_text: str) -> List[Message]:
 
 
 def _build_message(buf: dict) -> Message:
+    """
+    Construct a Message dataclass instance from a raw buffer dict.
+
+    Args:
+        buf: Dict with keys timestamp, sender, text, is_system, raw.
+
+    Returns:
+        Fully populated Message instance.
+    """
     return Message(
         timestamp=buf["timestamp"],
         sender=buf["sender"],

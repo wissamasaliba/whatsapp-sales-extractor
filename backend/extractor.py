@@ -24,8 +24,11 @@ CURRENCY_RE = re.compile(
     re.IGNORECASE,
 )
 
+# Matches standalone quantity expressions with common unit abbreviations
+# e.g. "10 pcs", "3 units", "2 caixas"
 QUANTITY_RE = re.compile(r"\b(\d+)\s*(?:un|pcs?|pieces?|units?|caixas?|boxes?)\b", re.IGNORECASE)
 
+# Keywords that commonly precede product identifiers in sales messages
 PRODUCT_KEYWORDS = [
     "produto", "product", "item", "ref", "código", "code", "sku",
 ]

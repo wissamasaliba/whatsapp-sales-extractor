@@ -1,3 +1,7 @@
+/**
+ * Column definitions for the sales table.
+ * Each entry maps a sale record key to its display label.
+ */
 const COLUMNS = [
   { key: "timestamp", label: "Timestamp" },
   { key: "sender", label: "Sender" },
@@ -9,6 +13,17 @@ const COLUMNS = [
   { key: "notes", label: "Notes" },
 ];
 
+/**
+ * Renders extracted sales records in a styled table with an optional error summary.
+ *
+ * Shows a centered empty-state message when no sales are present.
+ * Flagged auditor issues are displayed in a collapsible <details> section above the table.
+ *
+ * @param {Object}   props
+ * @param {Object[]} props.sales  - Array of validated sale dicts from the backend.
+ * @param {Object[]} props.errors - Array of flagged issue dicts from the BugChecker agent.
+ * @returns {JSX.Element} A scrollable table or an empty-state paragraph.
+ */
 export default function SalesTable({ sales, errors }) {
   if (!sales || sales.length === 0) {
     return <p style={{ textAlign: "center", color: "#888" }}>No sales data to display.</p>;

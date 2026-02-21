@@ -12,10 +12,28 @@ from parser import parse_chat, Message
 
 class ParserAgent:
     async def run(self, raw_text: str) -> List[Dict[str, Any]]:
+        """
+        Parse raw WhatsApp export text into a list of message dicts.
+
+        Args:
+            raw_text: Full string contents of the .txt export file.
+
+        Returns:
+            List of dicts with keys: timestamp, sender, text, is_system.
+        """
         messages = parse_chat(raw_text)
         return [self._to_dict(m) for m in messages]
 
     def _to_dict(self, msg: Message) -> Dict[str, Any]:
+        """
+        Serialize a Message dataclass to a plain dict for downstream agents.
+
+        Args:
+            msg: Parsed Message instance.
+
+        Returns:
+            Dict with keys: timestamp, sender, text, is_system.
+        """
         return {
             "timestamp": msg.timestamp,
             "sender": msg.sender,

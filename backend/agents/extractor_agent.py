@@ -29,6 +29,20 @@ Do NOT include any text outside the JSON array.
 
 class ExtractorAgent:
     async def run(self, messages: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """
+        Extract structured sale records from a list of parsed message dicts.
+
+        Uses a rule-based pre-filter (regex for prices/quantities) to narrow
+        the message set before sending batches of 30 to the Groq LLM, minimising
+        API cost and latency. Failed JSON parses are silently skipped; the
+        BugChecker agent will flag any resulting gaps.
+
+        Args:
+            messages: List of message dicts as produced by ParserAgent.
+
+        Returns:
+            List of raw sale dicts as returned by the LLM (unvalidated).
+        """
         # Rule-based pre-filter to reduce API calls
         from parser import Message
         raw_messages = [

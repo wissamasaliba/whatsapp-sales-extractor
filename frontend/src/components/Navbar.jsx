@@ -1,5 +1,13 @@
 import logo from "../assets/logo.jpg";
 
+/**
+ * Top navigation bar displayed across the full width of every page.
+ *
+ * Renders the company logo and the application name on a dark background.
+ * The logo uses objectFit "contain" to ensure it is never clipped.
+ *
+ * @returns {JSX.Element} A full-width <nav> element.
+ */
 export default function Navbar() {
   return (
     <nav

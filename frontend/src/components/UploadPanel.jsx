@@ -1,6 +1,17 @@
 import { useRef, useState } from "react";
 import { uploadChat } from "../api/client";
 
+/**
+ * Drag-and-drop file upload panel for WhatsApp .txt exports.
+ *
+ * Accepts files via drag-and-drop or a hidden file input. Validates that the
+ * selected file has a .txt extension before uploading. Displays a live progress
+ * bar and percentage during the upload, and shows an inline error on failure.
+ *
+ * @param {Object}   props
+ * @param {Function} props.onResult - Callback invoked with the backend response on success.
+ * @returns {JSX.Element} The upload drop zone with progress and error states.
+ */
 export default function UploadPanel({ onResult }) {
   const inputRef = useRef(null);
   const [dragging, setDragging] = useState(false);
@@ -8,6 +19,15 @@ export default function UploadPanel({ onResult }) {
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState(null);
 
+  /**
+   * Validate and upload a file to the backend pipeline.
+   *
+   * Rejects non-.txt files immediately. On success, forwards the parsed
+   * result to the parent via onResult. On failure, surfaces the backend
+   * error detail or a generic fallback message.
+   *
+   * @param {File} file - The file selected by the user.
+   */
   async function handleFile(file) {
     if (!file || !file.name.endsWith(".txt")) {
       setError("Please select a WhatsApp exported .txt file.");
@@ -26,6 +46,12 @@ export default function UploadPanel({ onResult }) {
     }
   }
 
+  /**
+   * Handle a file dropped onto the drop zone.
+   * Prevents default browser behaviour (opening the file) and delegates to handleFile.
+   *
+   * @param {DragEvent} e - The drop event from the drag-and-drop interaction.
+   */
   function onDrop(e) {
     e.preventDefault();
     setDragging(false);

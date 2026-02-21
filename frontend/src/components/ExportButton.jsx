@@ -19,25 +19,19 @@ export default function ExportButton({ sales }) {
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 6 }}>
+      {/* #2 — disabled state handled by .btn-primary:disabled in index.css */}
+      {/* #5 — font size and padding now consistent with "Upload another" via .btn */}
+      {/* #7 — hover handled by .btn-primary:hover:not(:disabled) in index.css */}
       <button
         onClick={handleExport}
         disabled={loading || !sales || sales.length === 0}
-        style={{
-          background: loading ? "#6b7280" : "#16a34a",
-          color: "#fff",
-          border: "none",
-          borderRadius: 8,
-          padding: "10px 24px",
-          fontSize: 15,
-          fontWeight: 600,
-          cursor: loading || !sales?.length ? "not-allowed" : "pointer",
-          transition: "background 0.2s",
-        }}
+        className="btn btn-primary"
       >
         {loading ? "Exporting…" : "Export to Excel"}
       </button>
-      {error && <span style={{ color: "red", fontSize: 13 }}>{error}</span>}
+      {/* #4 — standardized error color from bare "red" to #dc2626 */}
+      {error && <span style={{ color: "#dc2626", fontSize: 13 }}>{error}</span>}
     </div>
   );
 }

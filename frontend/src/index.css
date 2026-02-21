@@ -1,0 +1,46 @@
+/* #1 — CSS reset: eliminates browser default body margin that breaks flush Navbar */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* #7 — Shared button classes so :hover/:disabled pseudo-states work (inline styles can't) */
+.btn {
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-secondary {
+  background: #fff;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.btn-secondary:hover {
+  background: #f3f4f6;
+}
+
+.btn-primary {
+  background: #16a34a;
+  color: #fff;
+  border: none;
+}
+
+/* #7 — Hover only when not disabled */
+.btn-primary:hover:not(:disabled) {
+  background: #15803d;
+}
+
+/* #2 — Disabled state is now visually distinct (covers both loading and no-sales) */
+.btn-primary:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}

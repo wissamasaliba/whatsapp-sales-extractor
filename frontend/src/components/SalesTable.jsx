@@ -31,7 +31,8 @@ export default function SalesTable({ sales, errors }) {
 
       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
         <thead>
-          <tr style={{ background: "#1f4e79", color: "#fff" }}>
+          {/* #3 — aligned to Navbar color (#111827) instead of unrelated navy #1f4e79 */}
+          <tr style={{ background: "#111827", color: "#fff" }}>
             {COLUMNS.map((c) => (
               <th
                 key={c.key}

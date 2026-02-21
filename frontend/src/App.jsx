@@ -49,17 +49,8 @@ export default function App() {
               </div>
 
               <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                <button
-                  onClick={handleReset}
-                  style={{
-                    background: "#fff",
-                    border: "1px solid #d1d5db",
-                    borderRadius: 8,
-                    padding: "9px 20px",
-                    fontSize: 14,
-                    cursor: "pointer",
-                  }}
-                >
+                {/* #5 — matches ExportButton size via shared .btn class */}
+                <button onClick={handleReset} className="btn btn-secondary">
                   Upload another
                 </button>
                 <ExportButton sales={result.sales} />

@@ -4,12 +4,20 @@ Uses Groq (qwen/qwen3-32b) to fix ambiguous or incomplete records.
 """
 
 import json
+import re
 from typing import List, Dict, Any, Tuple
 
 from extractor import groq_client, MODEL
 
 REQUIRED_FIELDS = ["timestamp", "sender", "product"]
 NUMERIC_FIELDS = ["quantity", "unit_price", "total_price"]
+
+# Patterns that indicate a WhatsApp media-only message with no extractable text
+MEDIA_PATTERNS = re.compile(
+    r"<media omitted>|image omitted|video omitted|audio omitted|"
+    r"sticker omitted|gif omitted|media omitted",
+    re.IGNORECASE,
+)
 
 FIX_PROMPT = """
 You are a data quality specialist. The following JSON objects are sale records that
@@ -34,12 +42,29 @@ class ValidatorAgent:
     ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
         clean, needs_fix = [], []
         for sale in sales:
+            # Silently drop media-only placeholders — nothing to extract
+            if self._is_media_only(sale):
+                continue
             sale = self._coerce_numerics(sale)
             if self._is_valid(sale):
                 clean.append(sale)
             else:
+                # Only reaches here when there IS a real product but fields are incomplete
                 needs_fix.append(sale)
         return clean, needs_fix
+
+    def _is_media_only(self, sale: Dict[str, Any]) -> bool:
+        """
+        Return True when the record originates from a media placeholder message
+        and contains no extractable sales data.
+        """
+        product = (sale.get("product") or "").strip()
+        if product and MEDIA_PATTERNS.search(product):
+            return True
+        # No product AND no numeric data → nothing to work with
+        has_product = bool(product)
+        has_any_numeric = any(sale.get(f) for f in NUMERIC_FIELDS)
+        return not has_product and not has_any_numeric
 
     def _coerce_numerics(self, sale: Dict[str, Any]) -> Dict[str, Any]:
         for field in NUMERIC_FIELDS:

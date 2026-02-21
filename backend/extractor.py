@@ -8,8 +8,11 @@ import os
 import re
 from typing import List, Dict, Any
 
+from dotenv import load_dotenv
 from groq import Groq
 from parser import Message
+
+load_dotenv()
 
 # Shared Groq client — imported by agent modules
 groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))

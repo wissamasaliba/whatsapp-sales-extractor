@@ -41,7 +41,8 @@ export default function UploadPanel({ onResult }) {
         onDragLeave={() => setDragging(false)}
         onDrop={onDrop}
         style={{
-          border: `2px dashed ${dragging ? "#25d366" : "#ccc"}`,
+          /* #6 — use #16a34a (same green as ExportButton) instead of #25d366 */
+          border: `2px dashed ${dragging ? "#16a34a" : "#ccc"}`,
           borderRadius: 12,
           padding: "48px 24px",
           textAlign: "center",
@@ -51,12 +52,27 @@ export default function UploadPanel({ onResult }) {
         }}
       >
         <p style={{ fontSize: 40, margin: 0 }}>📄</p>
-        <p style={{ fontWeight: 600, margin: "8px 0 4px" }}>
+        {/* #9 — explicit fontSize so it doesn't fall back to unpredictable browser default */}
+        <p style={{ fontWeight: 600, fontSize: 16, margin: "8px 0 4px" }}>
           {loading ? `Processing… ${progress}%` : "Drop your WhatsApp chat export here"}
         </p>
         <p style={{ color: "#888", fontSize: 14 }}>
           or click to browse — .txt files only
         </p>
+        {/* #10 — visual progress bar during upload */}
+        {loading && (
+          <div style={{ marginTop: 16, background: "#e5e7eb", borderRadius: 4, height: 4 }}>
+            <div
+              style={{
+                width: `${progress}%`,
+                background: "#16a34a",
+                height: "100%",
+                borderRadius: 4,
+                transition: "width 0.3s",
+              }}
+            />
+          </div>
+        )}
       </div>
 
       <input
@@ -67,8 +83,9 @@ export default function UploadPanel({ onResult }) {
         onChange={(e) => handleFile(e.target.files[0])}
       />
 
+      {/* #4 — standardized error color from bare "red" to #dc2626 */}
       {error && (
-        <p style={{ color: "red", marginTop: 12, textAlign: "center" }}>{error}</p>
+        <p style={{ color: "#dc2626", marginTop: 12, textAlign: "center" }}>{error}</p>
       )}
     </div>
   );
